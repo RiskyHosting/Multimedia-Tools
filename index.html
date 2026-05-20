@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Multimedia Tools | Dashboard Kelompok A</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Poppins', sans-serif;
+            overflow-x: hidden;
+            transition: background-color 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), color 0.3s ease;
+        }
+
+        /* ========= TEMA GELAP PROFESIONAL (DEFAULT) ========= */
+        body.dark {
+            background: #05070a;
+            color: #eef2ff;
+        }
+
+        /* background sistem yang lebih modern & clean */
+        .bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .bg-base {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #05070a;
+        }
+
+        body.dark .bg-base { background: #05070a; }
+        body.light .bg-base { background: #f9fafb; }
+
+        /* Gradient Aurora halus */
+        .gradient-aurora {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(45, 70, 100, 0.4) 0%, rgba(5, 7, 10, 0) 70%),
+                        radial-gradient(circle at 85% 70%, rgba(80, 100, 130, 0.3) 0%, rgba(5, 7, 10, 0) 70%);
+            animation: auroraPulse 14s ease-in-out infinite;
+        }
+
+        @keyframes auroraPulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+
+        body.light .gradient-aurora {
+            background: radial-gradient(circle at 20% 30%, rgba(148, 163, 184, 0.2) 0%, rgba(249, 250, 251, 0) 70%),
+                        radial-gradient(circle at 85% 70%, rgba(100, 116, 139, 0.15) 0%, rgba(249, 250, 251, 0) 70%);
+        }
+
+        /* Glowing Orbs refined */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            animation: floatOrb 20s ease-in-out infinite;
+            opacity: 0.5;
+        }
+        body.dark .orb { opacity: 0.45; }
+        body.light .orb { opacity: 0.3; }
+
+        .orb-1 { width: 550px; height: 550px; background: #2c3e55; top: -200px; left: -150px; animation-delay: 0s; }
+        .orb-2 { width: 600px; height: 600px; background: #1f2a3a; bottom: -200px; right: -150px; animation-delay: 6s; }
+        .orb-3 { width: 450px; height: 450px; background: #3a4c66; top: 40%; left: 70%; animation-delay: 12s; }
+        .orb-4 { width: 380px; height: 380px; background: #1e2a3a; bottom: 15%; left: -5%; animation-delay: 3s; }
+        .orb-5 { width: 500px; height: 500px; background: #2d3e54; top: 10%; left: 25%; animation-delay: 9s; }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(55px, -45px) scale(1.1); }
+            66% { transform: translate(-35px, 40px) scale(0.95); }
+        }
+
+        /* Grid garis halus profesional */
+        .grid-subtle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 70px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 70px);
+            animation: gridSlide 25s linear infinite;
+            pointer-events: none;
+        }
+
+        body.light .grid-subtle {
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.025) 0px, rgba(0,0,0,0.025) 1px, transparent 1px, transparent 70px),
+                repeating-linear-gradient(90deg, rgba(0,0,0,0.025) 0px, rgba(0,0,0,0.025) 1px, transparent 1px, transparent 70px);
+        }
+
+        @keyframes gridSlide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(70px, 70px); }
+        }
+
+        /* Diagonal flow */
+        .diagonal-flow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 55px);
+            animation: diagonalFlow 22s linear infinite;
+            pointer-events: none;
+        }
+
+        body.light .diagonal-flow {
+            background: repeating-linear-gradient(45deg, rgba(0,0,0,0.01) 0px, rgba(0,0,0,0.01) 1px, transparent 1px, transparent 55px);
+        }
+
+        @keyframes diagonalFlow {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(55px, 55px); }
+        }
+
+        /* noise halus */
+        .noise-soft {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            animation: subtleNoise 6s steps(3) infinite;
+        }
+
+        @keyframes subtleNoise {
+            0%, 100% { opacity: 0.03; }
+            50% { opacity: 0.05; }
+        }
+
+        /* ========= PARTIKEL YANG BERGERAK DARI BAWAH KE ATAS ========= */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            bottom: -20px;
+            background: rgba(180, 200, 230, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatUp linear infinite;
+        }
+
+        body.light .particle {
+            background: rgba(60, 80, 110, 0.35);
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* ========= UI COMPONENTS PREMIUM ========= */
+        .hamburger {
+            position: fixed;
+            top: 28px;
+            left: 28px;
+            width: 48px;
+            height: 48px;
+            background: rgba(20, 24, 32, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .hamburger i {
+            font-size: 1.4rem;
+            color: #cbd5e6;
+            transition: transform 0.2s;
+        }
+
+        .hamburger:hover {
+            background: rgba(35, 40, 50, 0.9);
+            transform: scale(1.02);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        body.light .hamburger {
+            background: rgba(255,255,255,0.8);
+            border-color: rgba(0,0,0,0.05);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.03);
+        }
+        body.light .hamburger i { color: #1e293b; }
+
+        /* Drawer premium */
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -340px;
+            width: 300px;
+            height: 100vh;
+            background: rgba(8, 10, 15, 0.96);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            z-index: 200;
+            transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 8px 0 32px rgba(0,0,0,0.3);
+        }
+
+        .drawer.open { left: 0; }
+
+        body.light .drawer {
+            background: rgba(255,255,255,0.97);
+            border-right: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 4px 0 24px rgba(0,0,0,0.05);
+        }
+
+        .drawer-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .drawer-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            background: linear-gradient(120deg, #fff, #9aaec0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        body.light .drawer-header h2 {
+            background: linear-gradient(120deg, #0f172a, #2d3a4e);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        .drawer-header p { font-size: 0.7rem; color: #8a99b0; margin-top: 6px; }
+
+        .drawer-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .drawer-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 14px;
+            color: #b9c2d4;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-radius: 16px;
+            transition: all 0.2s;
+            font-weight: 470;
+        }
+
+        .drawer-link i { width: 32px; font-size: 1.1rem; }
+
+        .drawer-link:hover, .drawer-link.active {
+            background: rgba(255,255,255,0.07);
+            color: white;
+        }
+        body.light .drawer-link { color: #334155; }
+        body.light .drawer-link:hover, body.light .drawer-link.active {
+            background: rgba(0,0,0,0.04);
+            color: #0f172a;
+        }
+
+        .drawer-footer {
+            padding-top: 1.2rem;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            font-size: 0.7rem;
+            text-align: center;
+            color: #6c7a91;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 150;
+            display: none;
+        }
+        .overlay.show { display: block; }
+
+        /* ========= MAIN CONTENT ========= */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            text-align: center;
+            margin: 3rem 0 2.5rem;
+        }
+
+        .hero h1 {
+            font-size: 3.6rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #ffffff 0%, #b9c8e8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.75rem;
+        }
+        body.light .hero h1 {
+            background: linear-gradient(135deg, #0f172a, #2c3e50);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            color: #9aaebf;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+        body.light .hero p { color: #475569; }
+
+        .hero-divider {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #5f7f9e, transparent);
+            margin: 1.8rem auto 0;
+            border-radius: 4px;
+        }
+
+        .about {
+            margin-top: 2.5rem;
+            padding: 0 1rem;
+        }
+
+        .section-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #7f8fa3;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .about p {
+            text-align: center;
+            line-height: 1.8;
+            font-size: 0.95rem;
+            max-width: 780px;
+            margin: 0 auto;
+            color: #cfdfef;
+        }
+        body.light .about p { color: #2c3e44; }
+
+        .cta-section {
+            text-align: center;
+            margin: 2.8rem 0 2.5rem;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(25, 30, 38, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 14px 38px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 550;
+            transition: all 0.3s ease;
+            color: #eef2ff;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary:hover {
+            background: #2a3442;
+            transform: translateY(-3px);
+            border-color: rgba(255,255,255,0.25);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+        }
+
+        body.light .btn-primary {
+            background: white;
+            border-color: rgba(0,0,0,0.08);
+            color: #0f172a;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        body.light .btn-primary:hover {
+            background: #f1f5f9;
+            border-color: rgba(0,0,0,0.15);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+        }
+
+        /* Team Cards premium */
+        .team {
+            margin-top: 1rem;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1.3rem;
+            margin-top: 1rem;
+        }
+
+        .team-member {
+            text-align: center;
+            transition: all 0.3s ease;
+            background: rgba(15, 20, 28, 0.35);
+            backdrop-filter: blur(4px);
+            padding: 1rem 0.5rem;
+            border-radius: 32px;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+        body.light .team-member {
+            background: rgba(255,255,255,0.5);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .team-member:hover {
+            transform: translateY(-6px);
+            background: rgba(25, 32, 45, 0.6);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .team-member img {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.15);
+            transition: 0.25s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .team-member h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 0.8rem;
+        }
+        .team-member p {
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: #97a9c2;
+        }
+        body.light .team-member p { color: #5b6e8c; }
+
+        .footer {
+            text-align: center;
+            padding: 2rem 0 1rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.7rem;
+            color: #7c8aa0;
+        }
+
+        /* Theme Toggle Professional */
+        .theme-toggle {
+            position: fixed;
+            top: 28px;
+            right: 28px;
+            width: 48px;
+            height: 48px;
+            background: rgba(20, 24, 32, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: 0.2s;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+        }
+        .theme-toggle i { font-size: 1.3rem; color: #facc15; }
+        body.light .theme-toggle { background: rgba(255,255,255,0.85); border-color: rgba(0,0,0,0.05); }
+        body.light .theme-toggle i { color: #334155; }
+        .theme-toggle:hover { transform: scale(1.03); background: #2d3748; }
+        body.light .theme-toggle:hover { background: white; }
+
+        @media (max-width: 900px) {
+            .team-grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+            .hero h1 { font-size: 2.8rem; }
+        }
+
+        @media (max-width: 600px) {
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .container { padding: 1rem; }
+            .hero h1 { font-size: 2.2rem; }
+            .hamburger, .theme-toggle { width: 42px; height: 42px; top: 18px; }
+            .hamburger { left: 18px; }
+            .theme-toggle { right: 18px; }
+        }
+    </style>
+</head>
+<body class="dark">
+    <!-- Background premium dengan animasi jelas -->
+    <div class="bg">
+        <div class="bg-base"></div>
+        <div class="gradient-aurora"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+        <div class="orb orb-5"></div>
+        <div class="grid-subtle"></div>
+        <div class="diagonal-flow"></div>
+        <div class="noise-soft"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <div class="hamburger" id="hamburger">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <div class="drawer" id="drawer">
+        <div class="drawer-header">
+            <h2>multimedia<span style="font-size:0.9rem;"> tools</span></h2>
+            <p>kelompok a • dkv</p>
+        </div>
+        <nav class="drawer-nav">
+            <a href="index.html" class="drawer-link active">
+                <i class="fas fa-compass"></i> Dashboard
+            </a>
+            <a href="fitur.html" class="drawer-link">
+                <i class="fas fa-cubes"></i> Semua Fitur
+            </a>
+        </nav>
+        <div class="drawer-footer">
+            <i class="fas fa-crown"></i> creative suite v2.0
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>multimedia tools</h1>
+            <p>ekosistem kreatif untuk kebutuhan visual & audio profesional</p>
+            <div class="hero-divider"></div>
+        </div>
+
+        <div class="about">
+            <div class="section-badge">— tentang projek —</div>
+            <p><strong>Multimedia Tools</strong> adalah platform all-in-one yang menghadirkan berbagai alat multimedia canggih: downloader video (TikTok, YouTube, Instagram), Pinterest search, konversi video ke audio, AI background remover, AI image generator, HD photo enhancer, Text to Speech, sound randomizer, dan vocal/music separator. Dikembangkan dengan antarmuka modern oleh <strong>Kelompok A</strong> (DKV / Multimedia).</p>
+        </div>
+
+        <div class="cta-section">
+            <a href="fitur.html" class="btn-primary">Jelajahi Semua Tools <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="team">
+            <div class="section-badge">— creative team —</div>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="https://files.catbox.moe/hxw6ln.jpeg" alt="Novita">
+                    <h4>Novita</h4>
+                    <p>CEO / Lead</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://files.catbox.moe/n8rgqp.jpeg" alt="Aidil">
+                    <h4>Aidil</h4>
+                    <p>Manager</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://files.catbox.moe/n8rgqp.jpeg" alt="Arjun">
+                    <h4>Arjun</h4>
+                    <p>Desainer</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://files.catbox.moe/94ucfo.jpg" alt="Bima">
+                    <h4>Bima</h4>
+                    <p>Desainer</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://files.catbox.moe/hxw6ln.jpeg" alt="Salsa">
+                    <h4>Salsa</h4>
+                    <p>Enginer ⚡</p>
+                </div>
+                <div class="team-member lead">
+                    <img src="https://files.catbox.moe/o944zy.jpg" alt="Risky">
+                    <h4>Risky Dinata</h4>
+                    <p>Engineer ⚡</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Kelompok A • DKV / Multimedia • all tools integrated</p>
+        </div>
+    </div>
+
+    <script>
+        // drawer
+        const hamburger = document.getElementById('hamburger');
+        const drawer = document.getElementById('drawer');
+        const overlay = document.getElementById('overlay');
+
+        const openDrawer = () => {
+            drawer.classList.add('open');
+            overlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        };
+        const closeDrawer = () => {
+            drawer.classList.remove('open');
+            overlay.classList.remove('show');
+            document.body.style.overflow = '';
+        };
+        hamburger.addEventListener('click', openDrawer);
+        overlay.addEventListener('click', closeDrawer);
+
+        // ========= PARTIKEL BERGERAK DARI BAWAH KE ATAS (fix numpuk di atas) =========
+        const particlesContainer = document.getElementById('particles');
+        
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Ukuran random antara 2px - 6px
+            const size = 2 + Math.random() * 5;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            
+            // Posisi horizontal random (0% - 100%)
+            particle.style.left = Math.random() * 100 + '%';
+            
+            // Durasi animasi random (4s - 12s) agar gerakannya natural
+            const duration = 4 + Math.random() * 10;
+            particle.style.animationDuration = duration + 's';
+            
+            // Delay random (0s - 8s) supaya tidak serempak
+            const delay = Math.random() * 8;
+            particle.style.animationDelay = delay + 's';
+            
+            // Opacity awal sedikit variasi
+            const opacity = 0.3 + Math.random() * 0.5;
+            particle.style.opacity = opacity;
+            
+            // Warna sedikit variasi (putih kebiruan)
+            if (Math.random() > 0.7) {
+                particle.style.background = 'rgba(200, 220, 255, 0.7)';
+            }
+            
+            particlesContainer.appendChild(particle);
+            
+            // Hapus particle setelah animasi selesai + sedikit buffer
+            setTimeout(() => {
+                if (particle && particle.remove) particle.remove();
+            }, duration * 1000 + 1000);
+        }
+        
+        // Buat 80 partikel awal dengan sebaran yang merata
+        for (let i = 0; i < 80; i++) {
+            createParticle();
+        }
+        
+        // Interval terus menerus membuat partikel baru (agar gerak terus berkesinambungan)
+        setInterval(() => {
+            // Buat 2-5 partikel setiap interval agar jumlah tetap dinamis
+            const count = 2 + Math.floor(Math.random() * 4);
+            for (let i = 0; i < count; i++) {
+                createParticle();
+            }
+        }, 800);
+        
+        // Bersihkan partikel berlebih sesekali (optional, untuk menjaga performa)
+        setInterval(() => {
+            const particles = document.querySelectorAll('.particle');
+            if (particles.length > 200) {
+                for (let i = 0; i < 50; i++) {
+                    if (particles[i] && particles[i].remove) particles[i].remove();
+                }
+            }
+        }, 15000);
+
+        // Theme Toggle: Dark default
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        const savedTheme = localStorage.getItem('multimedia_theme');
+        if (savedTheme === 'light') {
+            document.body.classList.remove('dark');
+            document.body.classList.add('light');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        } else if (savedTheme === 'dark') {
+            document.body.classList.remove('light');
+            document.body.classList.add('dark');
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        } else {
+            localStorage.setItem('multimedia_theme', 'dark');
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                document.body.classList.add('light');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('multimedia_theme', 'light');
+            } else {
+                document.body.classList.remove('light');
+                document.body.classList.add('dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('multimedia_theme', 'dark');
+            }
+        });
+    </script>
+</body>
+  </html>
