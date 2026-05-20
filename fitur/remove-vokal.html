@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Pemisah Vokal & Musik | Multimedia Tools - Kelompok A</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Poppins', sans-serif;
+            overflow-x: hidden;
+            transition: background-color 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), color 0.3s ease;
+        }
+
+        /* ========= TEMA GELAP PROFESIONAL (DEFAULT) ========= */
+        body.dark {
+            background: #05070a;
+            color: #eef2ff;
+        }
+
+        body.light {
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        /* ========= BACKGROUND ANIMASI ========= */
+        .bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .bg-base {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        body.dark .bg-base { background: #05070a; }
+        body.light .bg-base { background: #f9fafb; }
+
+        .gradient-aurora {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(45, 70, 100, 0.4) 0%, rgba(5, 7, 10, 0) 70%),
+                        radial-gradient(circle at 85% 70%, rgba(80, 100, 130, 0.3) 0%, rgba(5, 7, 10, 0) 70%);
+            animation: auroraPulse 14s ease-in-out infinite;
+        }
+
+        body.light .gradient-aurora {
+            background: radial-gradient(circle at 20% 30%, rgba(148, 163, 184, 0.2) 0%, rgba(249, 250, 251, 0) 70%),
+                        radial-gradient(circle at 85% 70%, rgba(100, 116, 139, 0.15) 0%, rgba(249, 250, 251, 0) 70%);
+        }
+
+        @keyframes auroraPulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            animation: floatOrb 20s ease-in-out infinite;
+        }
+        body.dark .orb { opacity: 0.45; }
+        body.light .orb { opacity: 0.3; }
+
+        .orb-1 { width: 550px; height: 550px; background: #2c3e55; top: -200px; left: -150px; animation-delay: 0s; }
+        .orb-2 { width: 600px; height: 600px; background: #1f2a3a; bottom: -200px; right: -150px; animation-delay: 6s; }
+        .orb-3 { width: 450px; height: 450px; background: #3a4c66; top: 40%; left: 70%; animation-delay: 12s; }
+        .orb-4 { width: 380px; height: 380px; background: #1e2a3a; bottom: 15%; left: -5%; animation-delay: 3s; }
+        .orb-5 { width: 500px; height: 500px; background: #2d3e54; top: 10%; left: 25%; animation-delay: 9s; }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(55px, -45px) scale(1.1); }
+            66% { transform: translate(-35px, 40px) scale(0.95); }
+        }
+
+        .grid-subtle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 70px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 70px);
+            animation: gridSlide 25s linear infinite;
+            pointer-events: none;
+        }
+
+        body.light .grid-subtle {
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.025) 0px, rgba(0,0,0,0.025) 1px, transparent 1px, transparent 70px),
+                repeating-linear-gradient(90deg, rgba(0,0,0,0.025) 0px, rgba(0,0,0,0.025) 1px, transparent 1px, transparent 70px);
+        }
+
+        @keyframes gridSlide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(70px, 70px); }
+        }
+
+        .diagonal-flow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 55px);
+            animation: diagonalFlow 22s linear infinite;
+            pointer-events: none;
+        }
+
+        body.light .diagonal-flow {
+            background: repeating-linear-gradient(45deg, rgba(0,0,0,0.01) 0px, rgba(0,0,0,0.01) 1px, transparent 1px, transparent 55px);
+        }
+
+        @keyframes diagonalFlow {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(55px, 55px); }
+        }
+
+        .noise-soft {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            animation: subtleNoise 6s steps(3) infinite;
+        }
+
+        @keyframes subtleNoise {
+            0%, 100% { opacity: 0.03; }
+            50% { opacity: 0.05; }
+        }
+
+        /* ========= PARTIKEL BERGERAK DARI BAWAH KE ATAS ========= */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            bottom: -20px;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatUp linear infinite;
+        }
+
+        body.dark .particle {
+            background: rgba(180, 200, 230, 0.6);
+        }
+        body.light .particle {
+            background: rgba(60, 80, 110, 0.35);
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* ========= HAMBURGER MENU ========= */
+        .hamburger {
+            position: fixed;
+            top: 28px;
+            left: 28px;
+            width: 48px;
+            height: 48px;
+            background: rgba(20, 24, 32, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .hamburger i {
+            font-size: 1.4rem;
+            color: #cbd5e6;
+            transition: transform 0.2s;
+        }
+
+        .hamburger:hover {
+            background: rgba(35, 40, 50, 0.9);
+            transform: scale(1.02);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        body.light .hamburger {
+            background: rgba(255,255,255,0.8);
+            border-color: rgba(0,0,0,0.05);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.03);
+        }
+        body.light .hamburger i { color: #1e293b; }
+
+        /* ========= DRAWER ========= */
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -340px;
+            width: 300px;
+            height: 100vh;
+            background: rgba(8, 10, 15, 0.96);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            z-index: 200;
+            transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 8px 0 32px rgba(0,0,0,0.3);
+        }
+
+        .drawer.open { left: 0; }
+
+        body.light .drawer {
+            background: rgba(255,255,255,0.97);
+            border-right: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 4px 0 24px rgba(0,0,0,0.05);
+        }
+
+        .drawer-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .drawer-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            background: linear-gradient(120deg, #fff, #9aaec0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        body.light .drawer-header h2 {
+            background: linear-gradient(120deg, #0f172a, #2d3a4e);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        .drawer-header p { font-size: 0.7rem; color: #8a99b0; margin-top: 6px; }
+
+        .drawer-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .drawer-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 14px;
+            color: #b9c2d4;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-radius: 16px;
+            transition: all 0.2s;
+            font-weight: 470;
+        }
+
+        .drawer-link i { width: 32px; font-size: 1.1rem; }
+
+        .drawer-link:hover, .drawer-link.active {
+            background: rgba(255,255,255,0.07);
+            color: white;
+        }
+        body.light .drawer-link { color: #334155; }
+        body.light .drawer-link:hover, body.light .drawer-link.active {
+            background: rgba(0,0,0,0.04);
+            color: #0f172a;
+        }
+
+        .drawer-footer {
+            padding-top: 1.2rem;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            font-size: 0.7rem;
+            text-align: center;
+            color: #6c7a91;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 150;
+            display: none;
+        }
+        .overlay.show { display: block; }
+
+        /* ========= TOMBOL TEMA (TERANG/GELAP) ========= */
+        .theme-toggle {
+            position: fixed;
+            top: 28px;
+            right: 28px;
+            width: 48px;
+            height: 48px;
+            background: rgba(20, 24, 32, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: 0.2s;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+        }
+        .theme-toggle i { font-size: 1.3rem; color: #facc15; }
+        body.light .theme-toggle { background: rgba(255,255,255,0.85); border-color: rgba(0,0,0,0.05); }
+        body.light .theme-toggle i { color: #334155; }
+        .theme-toggle:hover { transform: scale(1.03); background: #2d3748; }
+        body.light .theme-toggle:hover { background: white; }
+
+        /* ========= MAIN CONTENT ========= */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tool-header {
+            text-align: center;
+            margin: 2rem 0 2rem;
+        }
+
+        .tool-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            background: linear-gradient(135deg, #ffffff 0%, #b9c8e8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        body.light .tool-header h1 {
+            background: linear-gradient(135deg, #0f172a, #2c3e50);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .tool-header p {
+            font-size: 0.95rem;
+            color: #9aaebf;
+        }
+        body.light .tool-header p { color: #475569; }
+
+        .hero-divider {
+            width: 70px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #5f7f9e, transparent);
+            margin: 1.2rem auto 0;
+            border-radius: 4px;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: rgba(15, 20, 28, 0.45);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 28px;
+            padding: 2rem;
+            margin-top: 1rem;
+        }
+        body.light .form-card {
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #8a99b0;
+            margin-bottom: 0.6rem;
+        }
+        body.light .input-group label { color: #5b6e8c; }
+
+        .file-upload {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            color: #eef2ff;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        body.light .file-upload {
+            background: rgba(0,0,0,0.03);
+            border-color: rgba(0,0,0,0.08);
+            color: #0f172a;
+        }
+        .file-upload::file-selector-button {
+            background: rgba(255,255,255,0.08);
+            border: none;
+            border-radius: 10px;
+            padding: 8px 16px;
+            color: #eef2ff;
+            margin-right: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        body.light .file-upload::file-selector-button {
+            background: rgba(0,0,0,0.06);
+            color: #0f172a;
+        }
+        .file-upload::file-selector-button:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .preview-audio {
+            width: 100%;
+            margin-top: 1rem;
+            border-radius: 30px;
+        }
+
+        /* ========= TOMBOL HIJAU DIKUNCI ========= */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .btn-primary {
+            background: #10B981 !important;
+            border: 1px solid #10B981 !important;
+            color: #ffffff !important;
+        }
+
+        .btn-primary:hover {
+            background: #059669 !important;
+            border-color: #059669 !important;
+            color: #ffffff !important;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            margin-top: 1.8rem;
+            padding: 1.2rem;
+            background: rgba(0,0,0,0.25);
+            border-radius: 20px;
+            display: none;
+        }
+        body.light .result {
+            background: rgba(0,0,0,0.03);
+        }
+
+        .loading-text {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top-color: #10B981;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .result-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        body.light .result-card {
+            background: rgba(0,0,0,0.05);
+        }
+
+        .result-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .result-title i { font-size: 1.1rem; }
+
+        .audio-player {
+            width: 100%;
+            margin: 0.8rem 0;
+            border-radius: 30px;
+        }
+
+        .download-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 0.5rem;
+            padding: 8px 20px;
+            background: #10B981;
+            border-radius: 40px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .download-link:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .error {
+            color: #f87171;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .info-text {
+            font-size: 0.7rem;
+            color: #7c8aa0;
+            text-align: center;
+            margin-top: 0.8rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.7rem;
+            color: #7c8aa0;
+        }
+        body.light .footer {
+            border-top-color: rgba(0,0,0,0.06);
+            color: #94a3b8;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 1rem; }
+            .tool-header h1 { font-size: 1.8rem; }
+            .form-card { padding: 1.5rem; }
+            .hamburger, .theme-toggle { width: 42px; height: 42px; top: 18px; }
+            .hamburger { left: 18px; }
+            .theme-toggle { right: 18px; }
+        }
+    </style>
+</head>
+<body class="dark">
+    <!-- Background -->
+    <div class="bg">
+        <div class="bg-base"></div>
+        <div class="gradient-aurora"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+        <div class="orb orb-5"></div>
+        <div class="grid-subtle"></div>
+        <div class="diagonal-flow"></div>
+        <div class="noise-soft"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <!-- Hamburger -->
+    <div class="hamburger" id="hamburger">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Tombol Tema -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <!-- Drawer -->
+    <div class="drawer" id="drawer">
+        <div class="drawer-header">
+            <h2>multimedia<span style="font-size:0.9rem;"> tools</span></h2>
+            <p>kelompok a • dkv</p>
+        </div>
+        <nav class="drawer-nav">
+            <a href="dasbor.html" class="drawer-link">
+                <i class="fas fa-compass"></i> Dashboard
+            </a>
+            <a href="fitur.html" class="drawer-link">
+                <i class="fas fa-cubes"></i> Semua Fitur
+            </a>
+        </nav>
+        <div class="drawer-footer">
+            <i class="fas fa-crown"></i> creative suite v2.0
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="tool-header">
+            <h1><i class="fas fa-microphone-alt"></i> Pemisah Vokal & Musik</h1>
+            <p>Upload lagu (MP3/WAV) → pisahkan vokal & instrumental dengan AI</p>
+            <div class="hero-divider"></div>
+        </div>
+
+        <div class="form-card">
+            <div class="input-group">
+                <label><i class="fas fa-music"></i> Pilih File Audio (MP3)</label>
+                <input type="file" id="fileInput" class="file-upload" accept="audio/mpeg,audio/mp3,audio/wav,audio/m4a">
+                <div id="preview"></div>
+            </div>
+
+            <button class="btn btn-primary" id="processBtn" disabled>
+                <i class="fas fa-code-branch"></i> Pisahkan Vokal & Musik
+            </button>
+
+            <div id="result" class="result"></div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Kelompok A • DKV / Multimedia • AI Vocal Isolator</p>
+        </div>
+    </div>
+
+    <script>
+        // Drawer menu
+        const hamburger = document.getElementById('hamburger');
+        const drawer = document.getElementById('drawer');
+        const overlay = document.getElementById('overlay');
+
+        function openDrawer() {
+            drawer.classList.add('open');
+            overlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrawer() {
+            drawer.classList.remove('open');
+            overlay.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        hamburger.addEventListener('click', openDrawer);
+        overlay.addEventListener('click', closeDrawer);
+
+        // ========= PARTIKEL BERGERAK =========
+        const particlesContainer = document.getElementById('particles');
+        
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = 2 + Math.random() * 5;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            const duration = 4 + Math.random() * 10;
+            particle.style.animationDuration = duration + 's';
+            const delay = Math.random() * 8;
+            particle.style.animationDelay = delay + 's';
+            particlesContainer.appendChild(particle);
+            setTimeout(() => {
+                if (particle && particle.remove) particle.remove();
+            }, duration * 1000 + 1000);
+        }
+        
+        for (let i = 0; i < 80; i++) createParticle();
+        setInterval(() => {
+            const count = 2 + Math.floor(Math.random() * 4);
+            for (let i = 0; i < count; i++) createParticle();
+        }, 800);
+        
+        setInterval(() => {
+            const particles = document.querySelectorAll('.particle');
+            if (particles.length > 200) {
+                for (let i = 0; i < 50; i++) {
+                    if (particles[i] && particles[i].remove) particles[i].remove();
+                }
+            }
+        }, 15000);
+
+        // ========= TEMA =========
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        const savedTheme = localStorage.getItem('multimedia_theme_removevokal');
+        if (savedTheme === 'light') {
+            document.body.classList.remove('dark');
+            document.body.classList.add('light');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        } else if (savedTheme === 'dark') {
+            document.body.classList.remove('light');
+            document.body.classList.add('dark');
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        } else {
+            localStorage.setItem('multimedia_theme_removevokal', 'dark');
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                document.body.classList.add('light');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('multimedia_theme_removevokal', 'light');
+            } else {
+                document.body.classList.remove('light');
+                document.body.classList.add('dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('multimedia_theme_removevokal', 'dark');
+            }
+        });
+
+        // ========= PEMISAH VOKAL =========
+        const fileInput = document.getElementById('fileInput');
+        const previewDiv = document.getElementById('preview');
+        const processBtn = document.getElementById('processBtn');
+        const resultDiv = document.getElementById('result');
+        let selectedFile = null;
+        let previewUrl = null;
+        let currentAudio = null;
+
+        function stopAllAudio() {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentAudio = null;
+            }
+            const allAudio = document.querySelectorAll('.audio-player');
+            allAudio.forEach(audio => {
+                if (!audio.paused) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+            });
+        }
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files[0]) {
+                selectedFile = e.target.files[0];
+                if (previewUrl) URL.revokeObjectURL(previewUrl);
+                previewUrl = URL.createObjectURL(selectedFile);
+                previewDiv.innerHTML = `<audio controls src="${previewUrl}" class="preview-audio"></audio>`;
+                processBtn.disabled = false;
+            } else {
+                previewDiv.innerHTML = '';
+                processBtn.disabled = true;
+            }
+        });
+
+        async function uploadToTmpFiles(file) {
+            const formData = new FormData();
+            formData.append('file', file, 'audio.mp3');
+            
+            const response = await fetch('https://tmpfiles.org/api/v1/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            
+            if (data && data.data && data.data.url) {
+                return data.data.url.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
+            }
+            throw new Error('Upload gagal');
+        }
+
+        processBtn.addEventListener('click', async () => {
+            if (!selectedFile) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<p class="error"><i class="fas fa-exclamation-triangle"></i> Pilih file audio terlebih dahulu</p>';
+                return;
+            }
+            
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<div style="text-align:center; padding:1rem;"><span class="loading-text"></span> Mengupload file...</div>';
+            processBtn.disabled = true;
+            
+            try {
+                const audioUrl = await uploadToTmpFiles(selectedFile);
+                console.log('Upload success:', audioUrl);
+                
+                resultDiv.innerHTML = '<div style="text-align:center; padding:1rem;"><span class="loading-text"></span> Memproses pemisahan vokal dengan AI... (10-30 detik)</div>';
+                
+                const response = await fetch(`https://api.nexray.eu.cc/tools/removevokal?url=${encodeURIComponent(audioUrl)}`);
+                const result = await response.json();
+                console.log('API Response:', result);
+                
+                if (result && result.status === true && result.result) {
+                    const vocalUrl = result.result.vocal;
+                    const instrumentalUrl = result.result.instrumental;
+                    const fileName = selectedFile.name.replace(/\.[^/.]+$/, '');
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result-card">
+                            <div class="result-title">
+                                <i class="fas fa-microphone" style="color: #10B981;"></i> Vokal (Suara)
+                            </div>
+                            <audio controls class="audio-player" src="${vocalUrl}"></audio>
+                            <a href="${vocalUrl}" download="${fileName}_vocal.mp3" class="download-link">
+                                <i class="fas fa-download"></i> Download Vokal
+                            </a>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-title">
+                                <i class="fas fa-music" style="color: #3B82F6;"></i> Instrumental (Musik)
+                            </div>
+                            <audio controls class="audio-player" src="${instrumentalUrl}"></audio>
+                            <a href="${instrumentalUrl}" download="${fileName}_instrumental.mp3" class="download-link">
+                                <i class="fas fa-download"></i> Download Instrumental
+                            </a>
+                        </div>
+                        <p class="info-text">
+                            <i class="fas fa-check-circle" style="color: #10B981;"></i> Pemisahan berhasil! 
+                            Jangan putar dua audio bersamaan untuk hasil terbaik.
+                        </p>
+                    `;
+                    
+                    const audioPlayers = document.querySelectorAll('.audio-player');
+                    audioPlayers.forEach(audio => {
+                        audio.addEventListener('play', function() {
+                            audioPlayers.forEach(other => {
+                                if (other !== this && !other.paused) {
+                                    other.pause();
+                                    other.currentTime = 0;
+                                }
+                            });
+                        });
+                    });
+                } else {
+                    resultDiv.innerHTML = `<p class="error"><i class="fas fa-times-circle"></i> Gagal memisahkan vokal. Coba file audio lain (MP3 yang lebih jelas).</p>`;
+                }
+            } catch (err) {
+                console.error(err);
+                resultDiv.innerHTML = `<p class="error"><i class="fas fa-wifi"></i> Error: ${err.message}. Periksa koneksi internet dan coba lagi.</p>`;
+            }
+            processBtn.disabled = false;
+        });
+    </script>
+</body>
+</html>
